@@ -23,12 +23,16 @@
 
 	if(!isset($_SESSION['cart']))
     	$_SESSION['cart']= array();
+    
+    $action = '';
+    if(array_key_exists('action', $_POST))
+    	$action = $_POST['action'];
 
-	if($_POST['action'] == 'loadArticls'){
+	if($action == 'loadArticls'){
 		echo json_encode(array('lstArticls'=>executeQuery('SELECT * FROM products'), 'inCart'=>inCart()));
 	}
 
-	if($_POST['action'] == 'addToCart'){
+	if($action == 'addToCart'){
 		$idArticl = $_POST['id'];
 		if(isset($_SESSION['cart'][$idArticl]))
             $_SESSION['cart'][$idArticl]++;
@@ -37,16 +41,16 @@
         echo json_encode(array('inCart'=>inCart()));
 	}
 
-	if($_POST['action'] == 'lstArticlsOrder'){
+	if($action == 'lstArticlsOrder'){
 		echo json_encode(recoverLstArticlsOrdred());
 	}
 
-	if($_POST['action'] == 'removeAction'){
+	if($action == 'removeAction'){
 		unset($_SESSION['cart'][$_POST['id']]);
 		echo json_encode(recoverLstArticlsOrdred());
 	}
 
-	if($_POST['action'] == 'orderNow'){
+	if($action == 'orderNow'){
 		if(count($_SESSION['cart'])>0){
 			$lstIdInCart = array_keys($_SESSION['cart']);
 			//It is assumed that the client is already an open session and we have his id 1
